@@ -1,0 +1,6 @@
+@Investidor.WebApi_HostAddress = http://localhost:5072
+
+GET {{Investidor.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
