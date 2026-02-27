@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Investidor.Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,13 +9,14 @@ namespace Investidor.Domain.Entities
     {
         protected Asset() { }
 
-        public Asset(string code, string name, Exchange exchange)
+        public Asset(string code, string name, decimal currentPrice, Exchange exchange)
         {
             if (string.IsNullOrWhiteSpace(code))
                 throw new ArgumentException("Código inválido.");
 
             Code = code;
             Name = name;
+            CurrentPrice = currentPrice;
             Exchange = exchange ?? throw new ArgumentNullException(nameof(exchange));
         }
 
@@ -36,19 +38,16 @@ namespace Investidor.Domain.Entities
         public decimal PercentageGain =>
             AmountInvested == 0 ? 0 : (Gain / AmountInvested) * 100;
 
-        public void Buy(decimal quantity, decimal unitPrice)
+        public void Buy(decimal quantity)
         {
             if (quantity <= 0)
                 throw new InvalidOperationException("Quantidade inválida.");
 
-            if (unitPrice <= 0)
-                throw new InvalidOperationException("Preço inválido.");
-
             Quantity += quantity;
-            AmountInvested += quantity * unitPrice;
+            AmountInvested += quantity * CurrentPrice;
         }
 
-        public void Sell(decimal quantity, decimal unitPrice)
+        public void Sell(decimal quantity)
         {
             if (quantity <= 0)
                 throw new InvalidOperationException("Quantidade inválida.");
@@ -62,7 +61,7 @@ namespace Investidor.Domain.Entities
             AmountInvested -= quantity * averagePrice;
         }
 
-        public void UpdateMarketPrice(decimal currentPrice)
+        public void UpdateCurrentPrice(decimal currentPrice)
         {
             if (currentPrice <= 0)
                 throw new InvalidOperationException("Preço inválido.");

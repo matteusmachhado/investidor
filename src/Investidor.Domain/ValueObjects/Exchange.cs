@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Investidor.Domain.Entities
+namespace Investidor.Domain.ValueObjects
 {
     public sealed class Exchange
     {
